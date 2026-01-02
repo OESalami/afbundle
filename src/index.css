@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+/* App base styles - simple, flat, clean */
+html, body, #root { height: 100%; }
+body { background-color: white; color: #111827; }
