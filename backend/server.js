@@ -17,8 +17,32 @@ connectDB();
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// CORS configuration
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:4173',
+  'http://localhost:3000',
+  process.env.FRONTEND_URL
+].filter(Boolean);
+
+app.use(cors({
+  origin: function(origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      // In production, you might want to be stricter
+      console.log('CORS: Allowing origin:', origin);
+      callback(null, true);
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
 
 // Routes
